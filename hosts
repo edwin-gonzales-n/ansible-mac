@@ -66,3 +66,6 @@ webserver
 [home-suse]
 opensuse
 
+[aws-nodes]
+aws-prod  #ubuntu16
+aws-dev #ubuntu16

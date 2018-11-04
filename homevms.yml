@@ -81,16 +81,3 @@
         user:
           name: eogonzal
           shell: /bin/zsh
-
-#      - name: Add the user 'eogonzal' and a primary group of 'sudo'
-#        user:
-#          name: eogonzal
-#          password: 'AB67sczrUqu2g'
-#          comment: Edwin Gonzales
-#          group: wheel
-
-#      - name: Change Password
-#        user:
-#          name: eogonzal
-#          password: "AB67sczrUqu2g"
-#          update_password: always

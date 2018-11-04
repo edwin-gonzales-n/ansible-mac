@@ -1,0 +1,67 @@
+---
+- hosts: aws-nodes
+  become: true
+  tasks:
+    - name: Updating APT 
+      apt:
+        update_cache: yes 
+
+    - name: Installing aptitude
+      apt:
+        name: aptitude
+        state: latest
+
+#    - name: Upgrade all packages to the latest version
+#      apt:
+#        name: "*"
+#        state: latest
+    
+    - name: installing curl
+      package:
+        name: curl
+        state: latest
+
+    - name: installing git
+      package:
+        name: git
+        state: latest
+
+    - name: installing zsh
+      package:
+        name: zsh
+        state: latest
+
+- hosts: aws-nodes
+  tasks:
+      - name: Cloning  oh-my-zsh
+        git:
+          repo=https://github.com/robbyrussell/oh-my-zsh
+          dest=~/.oh-my-zsh
+
+      - name: Creating new ~/.zshrc
+        copy:
+          src=~/.oh-my-zsh/templates/zshrc.zsh-template
+          dest=~/.zshrc
+
+      - name: Cloning zsh-syntax-highlighting from GIT
+        git:
+          repo=https://github.com/zsh-users/zsh-syntax-highlighting
+          dest=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+      - name: Updating .zshrc file
+        shell: sed -i '62s/$/ colored-man-pages zsh-syntax-highlighting/' ~/.zshrc
+
+      - name: Updating the zsh theme on User eogonzal shell
+        replace:
+          path: ~/.zshrc
+          regexp: 'ZSH_THEME="robbyrussell"'
+          replace: 'ZSH_THEME="af-magic"'
+
+- hosts: aws-nodes
+  become: true
+  tasks:
+      - name: Switching user shell to zsh
+        user:
+          name: eogonzal
+          shell: /bin/zsh
+
