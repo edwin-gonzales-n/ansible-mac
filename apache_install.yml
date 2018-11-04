@@ -1,0 +1,57 @@
+---
+- hosts: web_portal
+  tasks:
+      - name: Apt-get update
+        apt:
+           update_cache: yes
+
+      - name: Install APACHE, NGINX, TMUX, NMAP, and NTP
+        apt: 
+           name: ['apache2', 'nginx', 'tmux', 'nmap', 'ntp'] 
+           update_cache: no
+
+      - name: Copy data files
+        copy: src=index.html dest=/var/www/html/
+        register: copy_status
+
+      - name: Stopping the Apache2 Service
+        service: name=apache2 state=stopped
+
+      - name: Copy template file
+        template: src=current.html.j2 dest=/var/www/html/current.html
+        register: template_status
+
+      - name: Starting the Apache Service
+        service: name=apache2 state=started
+
+      - name: Check Uptime
+        shell: uptime
+        register: uptime_var
+
+      - name: Copy status
+        debug: var=copy_status
+
+      - name: Template copy status
+        debug: var=template_status
+
+      - name: Uptime output
+        debug: var=uptime_var
+
+      - name: Testing Conditional
+        shell: uptime
+        when: ansible_hostname == "ansible-node1"
+
+      - name: Testing until
+        shell: systemctl status apache2
+        register: result
+        until: result.stdout.find("active (running)") != -1
+        retries: 5
+        delay: 5
+
+
+  handlers:
+     - name: Start apache
+       service: name=apache2 state=started
+
+     - name: Stop apache
+       service: name=apache2 state=stopped
