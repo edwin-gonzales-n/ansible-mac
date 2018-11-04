@@ -1,0 +1,96 @@
+---
+- hosts: home-ubuntu
+  become: true
+  tasks:
+      - name: Updating apt 
+        apt:
+          update_cache: yes       
+
+- hosts: home-centos
+  become: true
+  tasks:
+      - name: Updating yum 
+        yum:
+          update_cache: yes 
+
+- hosts: home-suse
+  become: true
+  tasks:
+      - name: Updating Zypper
+        zypper:
+          name: '*' 
+          state: latest
+
+      - name: Apply all available patches on opensuse
+        zypper:
+          name: '*' 
+          state: latest
+          type: patch
+
+- hosts: homevms
+  become: true
+  tasks:
+      - name: installing curl
+        package: 
+          name: curl
+          state: latest
+
+      - name: installing git
+        package: 
+          name: git
+          state: latest
+
+      - name: installing zsh
+        package: 
+          name: zsh
+          state: latest
+
+#      - name: Backing up existing ~/.zshrc
+#        shell: if [ -f ~/.zshrc ]; then mv ~/.zshrc{,.orig}; fi
+
+- hosts: homevms
+  tasks:
+      - name: Cloning  oh-my-zsh
+        git:
+          repo=https://github.com/robbyrussell/oh-my-zsh
+          dest=~/.oh-my-zsh
+
+      - name: Creating new ~/.zshrc
+        copy:
+          src=~/.oh-my-zsh/templates/zshrc.zsh-template
+          dest=~/.zshrc
+
+      - name: Cloning zsh-syntax-highlighting from GIT
+        git:
+          repo=https://github.com/zsh-users/zsh-syntax-highlighting
+          dest=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+      - name: Updating .zshrc file
+        shell: sed -i '62s/$/ colored-man-pages zsh-syntax-highlighting/' ~/.zshrc
+
+      - name: Updating the zsh theme on User eogonzal shell
+        replace:
+          path: ~/.zshrc
+          regexp: 'ZSH_THEME="robbyrussell"'
+          replace: 'ZSH_THEME="af-magic"'
+
+- hosts: homevms
+  become: true
+  tasks:
+      - name: Switching user shell to zsh
+        user:
+          name: eogonzal
+          shell: /bin/zsh
+
+#      - name: Add the user 'eogonzal' and a primary group of 'sudo'
+#        user:
+#          name: eogonzal
+#          password: 'AB67sczrUqu2g'
+#          comment: Edwin Gonzales
+#          group: wheel
+
+#      - name: Change Password
+#        user:
+#          name: eogonzal
+#          password: "AB67sczrUqu2g"
+#          update_password: always

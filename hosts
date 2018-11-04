@@ -51,3 +51,18 @@ webserver  #centos7
 ubuntu-app #ubuntu16
 ubuntu-db  #ubuntu16
 ubuntu-web #ubuntu16
+
+[home-ubuntu]
+ubuntu-app
+ubuntu-db
+ubuntu-web
+
+[home-centos]
+ansible
+appserver
+dbserver
+webserver
+
+[home-suse]
+opensuse
+
