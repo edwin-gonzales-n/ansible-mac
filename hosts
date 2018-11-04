@@ -42,7 +42,6 @@
 
 ## db-[99:101]-node.example.com
 [homevms]
-## VMs at home
 opensuse   #suse linux
 ansible    #centos7
 appserver  #centos7
@@ -68,4 +67,13 @@ opensuse
 
 [aws-nodes]
 aws-prod  #ubuntu16
-aws-dev #ubuntu16
+aws-dev   #ubuntu16
+aws-app   #ubuntu16
+
+[all_ubuntu]
+ubuntu-app #ubuntu16
+ubuntu-db  #ubuntu16
+ubuntu-web #ubuntu16
+aws-prod  #ubuntu16
+aws-dev   #ubuntu16
+aws-app   #ubuntu16

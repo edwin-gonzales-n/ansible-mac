@@ -1,5 +1,5 @@
 ---
-- hosts: aws-nodes
+- hosts: aws-app
   become: true
   tasks:
     - name: Updating APT 
@@ -11,10 +11,10 @@
         name: aptitude
         state: latest
 
-#    - name: Upgrade all packages to the latest version
-#      apt:
-#        name: "*"
-#        state: latest
+    - name: Upgrade all packages to the latest version
+      apt:
+        name: "*"
+        state: latest
     
     - name: installing curl
       package:
@@ -31,7 +31,7 @@
         name: zsh
         state: latest
 
-- hosts: aws-nodes
+- hosts: aws-app
   tasks:
       - name: Cloning  oh-my-zsh
         git:
@@ -57,11 +57,10 @@
           regexp: 'ZSH_THEME="robbyrussell"'
           replace: 'ZSH_THEME="af-magic"'
 
-- hosts: aws-nodes
+- hosts: aws-app
   become: true
   tasks:
       - name: Switching user shell to zsh
         user:
           name: eogonzal
           shell: /bin/zsh
-

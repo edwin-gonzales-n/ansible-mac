@@ -1,0 +1,18 @@
+---
+- hosts: all_ubuntu
+  become: true
+  tasks:
+    - name: Updating and upgrading packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Installing aptitude
+      package:
+        name: ptop
+        state: latest
+   
+    - name: installing ptop
+      package:
+        name: ptop
+        state: latest
