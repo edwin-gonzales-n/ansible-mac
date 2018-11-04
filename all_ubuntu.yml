@@ -9,10 +9,25 @@
 
     - name: Installing aptitude
       package:
-        name: ptop
+        name: aptitude
         state: latest
    
     - name: installing ptop
       package:
         name: ptop
+        state: latest
+
+    - name: installing ntop
+      package:
+        name: ntop
+        state: latest
+
+    - name: installing sysstat
+      package:
+        name: sysstat
+        state: latest
+
+    - name: installing awstats
+      package:
+        name: awstats
         state: latest
