@@ -1,5 +1,5 @@
 ---
-- hosts: db_portal
+- hosts: home-centos
   tasks:
     - name: yum update
       yum:

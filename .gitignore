@@ -1,0 +1,7 @@
+~/myAnsible/roles/geerlingguy.mysql
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr

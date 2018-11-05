@@ -1,0 +1,92 @@
+---
+- hosts: dbserver
+  become: true
+#  vars:
+#    root_db_password: admin123
+  pre_tasks:
+  - name: Install the MySQL repo.
+    yum:
+      name: http://repo.mysql.com/mysql80-community-release-el7-1.noarch.rpm
+      state: present
+    when: ansible_os_family == "RedHat"
+
+  - name: Override variables for MySQL (RedHat).
+    set_fact:
+      mysql_daemon: mysqld
+      mysql_packages: ['mysql-server']
+      mysql_log_error: /var/log/mysqld.err
+      mysql_syslog_tag: mysqld
+      mysql_pid_file: /var/run/mysqld/mysqld.pid
+      mysql_socket: /var/lib/mysql/mysql.sock
+    when: ansible_os_family == "RedHat"
+
+  roles:
+    - geerlingguy.mysql
+
+#  tasks:
+#    - name: yum update
+#      yum:
+#        name: '*'
+#        state: latest
+#
+#    - name: install the 'Development tools' package group
+#      yum:
+#        name: "@Development tools"
+#        state: present
+
+#    - name: removing mysql80-community-release.noarch 0:el7-1
+#      yum:
+#        name: mysql80-community-release
+#        state: absent
+#
+#    - name: removing Mysql-Server
+#      yum:
+#        name: mysql-server
+#        state: absent
+#
+#    - name: Download MySQL Community Repo
+#      get_url:
+#        url: http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
+#        dest: /tmp
+#
+#    - name: Install MySQL Community Repo
+#      command: /usr/bin/rpm -ivh /tmp/mysql-community-release-el7-7.noarch.rpm
+#
+#    - name: Install MySQL Server
+#      yum: name=mysql-server state=present
+#
+#    - name: Install MySQL-python, this is required for the task remove anonymous user
+#      yum: name=MySQL-python state=present
+#
+#    - name: Start MySQL Server and enable it
+#      service: name=mysqld state=started enabled=yes
+
+#    - name: Find temporary password
+#      shell: "echo `grep 'temporary.*root@localhost' /var/log/mysqld.log | sed
+#    's/.*root@localhost: //'`"
+#      register: mysql_root_password_temp
+#      tags: register
+
+#    Set the new password using the temporary password
+#    - name: Set new password from temporary password
+#      shell: 'mysql -e "SET PASSWORD = PASSWORD(''{{ root_db_password }}'');"
+#    --connect-expired-password -u root -p"{{ mysql_root_password_temp.stdout
+#    }}"'
+
+#    - name: Remove Test database if it exist.
+#      mysql_db: name=test state=absent
+#
+#    - name: Remove All Anonymous User Accounts
+#      mysql_user: name=” host_all=yes state=absent
+#
+#    - name: Change root password
+#      mysql_user: name=root host={{item}} password={{root_db_password}} login_user=root login_password="{{ mysql_root_password_temp.stdout
+#        }}"
+#      with_items:
+#      - “{{ansible_hostname}}”
+#      - 127.0.0.1
+#      - ::1
+#      - localhost
+
+  # - name: Output ansible_hostname
+  # debug: msg=”Hostname is {{ansible_hostname}}”
