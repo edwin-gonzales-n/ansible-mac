@@ -1,4 +1,4 @@
-~/myAnsible/roles/geerlingguy.mysql
+roles/geerlingguy.mysql
 
 ### IntelliJ IDEA ###
 .idea
