@@ -41,6 +41,10 @@
 # leading 0s:
 
 ## db-[99:101]-node.example.com
+
+###### VirtualBox VMs ######
+ansible-head #ubuntu16
+
 [homevms]
 opensuse   #suse linux
 ansible    #centos7
@@ -77,3 +81,14 @@ ubuntu-web #ubuntu16
 aws-prod  #ubuntu16
 aws-dev   #ubuntu16
 aws-app   #ubuntu16
+
+[oci]
+edwin-arvr #ubuntu16
+
+[cloud-nodes]
+aws-prod
+aws-app
+arvr
+
+[windows]
+aws-windows

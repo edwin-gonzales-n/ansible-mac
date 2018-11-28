@@ -1,15 +1,16 @@
 ---
-- hosts: my_nodes
-  vars:
-   package1: "nginx"
-   package2: "wget"
+- hosts: aws-dev
+  become: true
+#  vars:
+#   package1: "nginx"
+#   package2: "wget"
 
   tasks:
-      - name: Installing package NGINX
-        apt: pkg=nginx state=present update_cache=true
-
-      - name: Installing wget
-        apt: name={{ package2 }} state=present update_cache=true
+#      - name: Installing package NGINX
+#        apt: pkg=nginx state=present update_cache=true
+#
+#      - name: Installing wget
+#        apt: name={{ package2 }} state=present update_cache=true
 
 #      - name: Copying test1.out
  #       copy: src=/tmp/test1.out dest=/tmp/test1.out
@@ -17,24 +18,70 @@
       - name: Apt-get update
         apt:
          update_cache: yes
+         upgrade: yes
 
-      - name: Installing default JRE
-        apt: pkg=default-jre
+#      - name: Installing firewalld
+#        package:
+#          name: firewalld
+#          state: present
 
-      - name: Installing default JDK
-        apt: pkg=default-jdk
- 
-      - name: Adding PPA for Java
-        apt_repository:
-            repo: ppa:openjdk-r/ppa
-            state: present
+#      - name: Installing python-flask
+#        apt:
+#          name: python-flask
+#          state: latest
 
-      - name: Apt-get update
-        apt:
-         update_cache: yes
+      - name: Installing python for pip command
+        package:
+          name: python-pip
+          state: present
 
-      - name: Installing Java
-        apt: pkg=openjdk-8-jdk
+      - name: Install Flask
+        pip:
+          name: flask
+          state: latest
 
-      - name: Installing NTP
-        apt: pkg=ntp
+      - name: Installing Beautiful Soup
+        pip:
+          name: beautifulsoup4
+          state: present
+
+#      - name: Cloning Megha's project from GitHub
+#        git:
+#          repo=https://github.com/MeghaGajbhiye/VirtualPillar
+#          dest=/home/eogonzal/VirtualPillar
+
+#      - name: Opening port 5000 in firewall
+#        firewalld:
+#          port: 5000
+#          permanent: true
+#          state: enabled
+      - name: Opening port 5000 in firewall
+        command: firewall-cmd --zone=public --add-port=5000/tcp --permanent
+
+- hosts: aws-dev
+  tasks:
+      - name: running Megha's program
+        shell: cd /home/eogonzal/VirtualPillar; nohup flask run --host=0.0.0.0 --port=5000 </dev/null >/dev/null 2>&1 &
+#        args:
+#          chdir: /home/eogonzal/VirtualPillar
+
+#      - name: Installing default JRE
+#        apt: pkg=default-jre
+#
+#      - name: Installing default JDK
+#        apt: pkg=default-jdk
+#
+#      - name: Adding PPA for Java
+#        apt_repository:
+#            repo: ppa:openjdk-r/ppa
+#            state: present
+#
+#      - name: Apt-get update
+#        apt:
+#         update_cache: yes
+#
+#      - name: Installing Java
+#        apt: pkg=openjdk-8-jdk
+#
+#      - name: Installing NTP
+#        apt: pkg=ntp

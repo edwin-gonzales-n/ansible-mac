@@ -31,6 +31,31 @@
         name: zsh
         state: latest
 
+    - name: Installing python3 for pip command
+      package:
+        name: python3-pip
+        state: present
+
+    - name: Install Ansible
+      pip:
+        name: ansible
+        state: present
+  
+    - name: Prereques for Dockers
+      pip:
+        name: docker-py
+        state: present
+
+    - name: Add gitlab-runner user to docker group
+      user:
+        name: gitlab-runner
+        groups: docker
+        append: yes
+
+    - name: Log gitlab-runner into dockerHub
+      become: yes
+  
+
 - hosts: aws-app
   tasks:
       - name: Cloning  oh-my-zsh
